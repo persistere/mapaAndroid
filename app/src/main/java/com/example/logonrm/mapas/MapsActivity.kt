@@ -4,6 +4,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -34,8 +35,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .getFromLocationName(
                             etEndereco.text.toString(),
                             1)
-            val location = address[0]
-            adicionarMarcador(location.latitude, location.longitude, "Endereço Pesquisar")
+
+            if (address.isNotEmpty()){
+                val location = address[0]
+                adicionarMarcador(location.latitude, location.longitude, "Endereço Pesquisar")
+            } else {
+                var alert = AlertDialog.Builder(this).create()
+                alert.setTitle("Ops!!!")
+                alert.setMessage("Endereço não encontrado")
+
+                alert.setCancelable(false)
+
+                alert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
+                    dialogInterface, interiro ->
+                    alert.dismiss()
+                })
+
+                alert.show()
+            }
+
 
         }
     }
@@ -53,8 +71,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-
-
     }
 }
